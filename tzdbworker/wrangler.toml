@@ -1,0 +1,8 @@
+name = "tzdbworker"
+main = "src/index.ts"
+compatibility_date = "2023-01-27"
+
+kv_namespaces = [
+  { binding = "KV_MISC", id = "9d0998a3a4af4b79a35479cf012f49b2", preview_id = "9d0998a3a4af4b79a35479cf012f49b2" },
+  { binding = "KV_ACCOUNTS", id = "7873940deb254f1a814a3409c2ed575c", preview_id = "7873940deb254f1a814a3409c2ed575c" },
+]
