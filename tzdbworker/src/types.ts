@@ -11,6 +11,8 @@ declare global {
 	const KV_ACCOUNTS: KVNamespace;
 	// maps discord IDs -> account ids
 	const KV_DISCORD: KVNamespace;
+	// maps session tokens -> account ids
+	const KV_SESSIONS: KVNamespace;
 }
 
 export interface Account {

@@ -6,9 +6,9 @@ export const services = {
 	discord: KV_DISCORD,
 } as const;
 
-export async function apiSelf(tok: string, id: string) {
-	const res = verifySessionTokenAndRespond(tok);
-	if (res !== true) return res;
+export async function apiSelf(tok: string) {
+	const id = await verifySessionTokenAndRespond(tok);
+	if (id instanceof Response) return id;
 
 	const account = await getAccount(id);
 	if (!account)
@@ -49,11 +49,10 @@ export async function apiAssociate(
 	service: keyof typeof services,
 	kv: KVNamespace,
 	tok: string,
-	acctId: string,
 	serviceId: string,
 ) {
-	const res = verifySessionTokenAndRespond(tok);
-	if (res !== true) return res;
+	const acctId = await verifySessionTokenAndRespond(tok);
+	if (acctId instanceof Response) return acctId;
 
 	const account = await getAccount(acctId);
 	if (!account)

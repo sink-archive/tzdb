@@ -37,11 +37,8 @@ with a brief guide for an example service.
 Authed endpoints require a valid session token in HTTP headers
 `Authorization: xxxxxxxx`.
 
-You should NOT attempt to decode auth tokens on the client
-(not that I'm incompetent to let doing such a thing be a security risk),
-but they do also identify you to the server.
-
-All this to say, authed endpoints do not need informing what your account ID is.
+You need not pass your account ID to any endpoints,
+as authed endpoints can obtain it from this token.
 
 Session tokens last 30 minutes,
 and the timer is reset every time you call an authed endpoint,
