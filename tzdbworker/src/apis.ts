@@ -48,6 +48,7 @@ supposed account id: ${acctId}`,
 export async function apiAssociate(
 	service: keyof typeof services,
 	kv: KVNamespace,
+	reassoc: boolean,
 	tok: string,
 	serviceId: string,
 ) {
@@ -65,12 +66,53 @@ export async function apiAssociate(
 			{ status: 403 },
 		);
 
+	if (!!existingAssoc !== reassoc)
+		return new Response(
+			reassoc
+				? `You do not have a ${service} account linked, please use assoc`
+				: `You already have a ${service} account linked, please use reassoc`,
+			{ status: 400 },
+		);
+
 	await kv.put(serviceId, acctId);
 
 	await saveAccount(acctId, {
 		...account,
-		[service]: serviceId,
+		services: {
+			...account.services,
+			[service]: serviceId,
+		},
 	});
+
+	return new Response(undefined, { status: 201 });
+}
+
+export async function apiDissociate(
+	service: keyof typeof services,
+	kv: KVNamespace,
+	tok: string,
+) {
+	const acctId = await verifySessionTokenAndRespond(tok);
+	if (acctId instanceof Response) return acctId;
+
+	const account = await getAccount(acctId);
+	if (!account)
+		return new Response("There is no account with that ID", { status: 404 });
+
+	if (!account.services[service])
+		return new Response(`You do not have a ${service} account linked`, {
+			status: 400,
+		});
+
+	const newAcct = {
+		...account,
+		services: { ...account.services },
+	};
+	delete newAcct.services[service];
+
+	await kv.delete(account.services[service]!);
+
+	await saveAccount(acctId, newAcct);
 
 	return new Response(undefined, { status: 204 });
 }
@@ -87,5 +129,9 @@ export async function apiCreateAccount(originRaw: string, offsetRaw: string) {
 	if (!Number.isFinite(offset))
 		return new Response("Provide an valid offset", { status: 400 });
 
-	return new Response(JSON.stringify(await createAccount({ origin, offset })));
+	// TODO require a service
+	return new Response(
+		JSON.stringify(await createAccount({ origin, offset, services: {} })),
+		{ status: 201 },
+	);
 }

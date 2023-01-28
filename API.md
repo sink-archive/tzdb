@@ -58,25 +58,22 @@ you can safely assume that any returned origins be all-uppercase.
 
 ## Returned object types
 
-Account object:
 ```ts
-{
-	"id": string,
-	"origin": Timezone, // (string)
-	"offset": number,
+type AccountObject = {
+	id: string;
+	origin: Timezone; // string
+	offset: number;
 
-	// discord account snowflake ID
-	"discord"?: string,
+	services: {
+		discord?: string;
+	};
 }
-```
 
-Timezone lookup object:
-```ts
-{
-	"origin": Timezone,
-	"offset": number,
+type TimezoneLookupObject = {
+	origin: Timezone;
+	offset: number;
 	// the resolved offset from UTC based on the origin and offset
-	"utcOffset": number
+	utcOffset: number;
 }
 ```
 
@@ -108,23 +105,6 @@ Get your own account object
 
 Get the timezone object of a user by an external ID
 
-## POST `/acct/create?origin=...&offset=...`
-
-Create an account with the given origin and offset.
-
-In this WIP version of this spec, you can just create accounts,
-but in future this will likely require Cloudflare Turnstile.
-
-## POST `/acct/modify?origin=...&offset=...` (AUTHED)
-
-Modify the timezone you have set for your current user.
-
-## DELETE `/acct/delete` (AUTHED)
-
-Be careful! If authed, instantly deletes your account irreversibly.
-
-Please provide adequate user safeguards in your UI.
-
 ## POST `/:service/assoc?token=...` (AUTHED)
 
 Links your account on the given service to TZDB.
@@ -142,11 +122,13 @@ The server will use this token to:
 If you already have a connection to the given service, this will fail.
 You should use `/reassoc`.
 
-## POST `/:service/reassoc?token=...`
+## POST `/:service/reassoc?token=...` (AUTHED)
 
 All that applies to `/assoc` applies here.
 
 The purpose of this is to modify an existing association.
+
+Fails if you are not already linked to this service.
 
 Why not just `/deassoc` then `/assoc`?
 Because the API will not allow you to remove your last remaining association,
@@ -161,6 +143,23 @@ Fails if the given service is not linked.
 
 Fails if this is only service linked to your account,
 as otherwise you would be locked out as soon as your session token expired!
+
+## POST `/acct/create?origin=...&offset=...`
+
+Create an account with the given origin and offset.
+
+In this WIP version of this spec, you can just create accounts,
+but in future this will likely require Cloudflare Turnstile.
+
+## POST `/acct/modify?origin=...&offset=...` (AUTHED)
+
+Modify the timezone you have set for your current user.
+
+## DELETE `/acct/delete` (AUTHED)
+
+Be careful! If authed, instantly deletes your account irreversibly.
+
+Please provide adequate user safeguards in your UI.
 
 ## POST `/auth/login?service=...&token=...`
 

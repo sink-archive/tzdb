@@ -20,7 +20,9 @@ export interface Account {
 	origin: Timezone;
 	offset: number;
 
-	discord?: string;
+	services: {
+		discord?: string;
+	};
 }
 
 export interface TimezoneResponse {
