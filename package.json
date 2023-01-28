@@ -1,1 +1,9 @@
-{}
+{
+	"scripts": {
+		"postinstall": "husky install"
+	},
+	"devDependencies": {
+		"husky": "^8.0.3",
+		"rome": "^11.0.0"
+	}
+}
