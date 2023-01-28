@@ -107,7 +107,7 @@ Returns the list of timezone origins, in a few useful forms.
 
 Get your own account object
 
-## GET `/lookup/:service/:id`
+## GET `/:service/lookup/:id`
 
 Get the timezone object of a user by an external ID
 
@@ -128,7 +128,7 @@ Be careful! If authed, instantly deletes your account irreversibly.
 
 Please provide adequate user safeguards in your UI.
 
-## POST `/assoc/:service?token=...` (AUTHED)
+## POST `/:service/assoc?token=...` (AUTHED)
 
 Links your account on the given service to TZDB.
 
@@ -145,7 +145,7 @@ The server will use this token to:
 If you already have a connection to the given service, this will fail.
 You should use `/reassoc`.
 
-## POST `/reassoc/:service?token=...`
+## POST `/:service/reassoc?token=...`
 
 All that applies to `/assoc` applies here.
 
@@ -156,7 +156,7 @@ Because the API will not allow you to remove your last remaining association,
 so if you move accounts on a service and its the only one you have linked,
 you would otherwise be unable to move it.
 
-## DELETE `/deassoc/:service` (AUTHED)
+## DELETE `/:service/deassoc` (AUTHED)
 
 Unlinks the external service irreversibly.
 
