@@ -10,6 +10,7 @@
     "deploy": "wrangler publish"
   },
   "dependencies": {
+    "hono": "^2.7.5",
     "msgpackr": "^1.8.2"
   }
 }
