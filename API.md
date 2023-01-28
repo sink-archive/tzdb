@@ -83,7 +83,7 @@ Timezone lookup object:
 }
 ```
 
-## `/tzlist`
+## GET `/tzlist`
 
 Returns the list of timezone origins, in a few useful forms.
 
@@ -118,7 +118,7 @@ Create an account with the given origin and offset.
 In this WIP version of this spec, you can just create accounts,
 but in future this will likely require Cloudflare Turnstile.
 
-## POST `/acct/modify/?origin=...&offset=...` (AUTHED)
+## POST `/acct/modify?origin=...&offset=...` (AUTHED)
 
 Modify the timezone you have set for your current user.
 
@@ -165,13 +165,14 @@ Fails if the given service is not linked.
 Fails if this is only service linked to your account,
 as otherwise you would be locked out as soon as your session token expired!
 
-## POST `/auth/login?service=...&token=...` (AUTHED)
+## POST `/auth/login?service=...&token=...`
 
 Authenticate with a linked service,
 then provide the token with this API to allow TZDB to verify you,
 locate your account, and generate you a session token.
 
-You will receive the session token in plaintext as the response body.
+You will receive the session token in plaintext as the response body,
+which you should provide to endpoints as detailed earlier in this document.
 
 ## POST `/auth/logout` (AUTHED)
 
