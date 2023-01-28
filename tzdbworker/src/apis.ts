@@ -6,6 +6,17 @@ export const services = {
 	discord: KV_DISCORD,
 } as const;
 
+export async function apiSelf(tok: string, id: string) {
+	const res = verifySessionTokenAndRespond(tok);
+	if (res !== true) return res;
+
+	const account = await getAccount(id);
+	if (!account)
+		return new Response("There is no account with that ID", { status: 404 });
+
+	return new Response(JSON.stringify(account));
+}
+
 export async function apiLookup(
 	service: keyof typeof services,
 	kv: KVNamespace,
@@ -32,17 +43,6 @@ supposed account id: ${acctId}`,
 		);
 
 	return new Response(JSON.stringify(createTimezoneResponse(account)));
-}
-
-export async function apiSelf(tok: string, id: string) {
-	const res = verifySessionTokenAndRespond(tok);
-	if (res !== true) return res;
-
-	const account = await getAccount(id);
-	if (!account)
-		return new Response("There is no account with that ID", { status: 404 });
-
-	return new Response(JSON.stringify(account));
 }
 
 export async function apiAssociate(
@@ -73,10 +73,12 @@ export async function apiAssociate(
 		[service]: serviceId,
 	});
 
-	return new Response();
+	return new Response(undefined, { status: 204 });
 }
 
 export async function apiCreateAccount(originRaw: string, offsetRaw: string) {
+	// TODO turnstile this
+
 	const origin = originRaw.toUpperCase();
 
 	if (!isValidTimezone(origin))
