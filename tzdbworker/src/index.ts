@@ -63,7 +63,6 @@ hono.post("/acct/create", (c) =>
 		c.req.query("offset"),
 		c.req.query("service"),
 		c.req.query("token"),
-		c.req.header("CF-Connecting-IP"),
 	),
 );
 

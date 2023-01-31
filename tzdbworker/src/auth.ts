@@ -1,18 +1,5 @@
-const sha512 = async (str: string) =>
-	Array.prototype.map
-		.call(
-			new Uint8Array(
-				await crypto.subtle.digest("SHA-512", new TextEncoder().encode(str)),
-			),
-			(x: number) => ("00" + x.toString(16)).slice(-2),
-		)
-		.join("");
-
-export async function createSessionToken(id: string, ip: string) {
-	const random = crypto.randomUUID();
-
-	const tok = await sha512(random + ip);
-
+export async function createSessionToken(id: string) {
+	const tok = crypto.randomUUID().replaceAll("-", "");
 	await KV_SESSIONS.put(tok, id, {
 		expirationTtl: 60 * 30, // 30 mins
 	});

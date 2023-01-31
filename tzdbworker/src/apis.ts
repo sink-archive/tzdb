@@ -131,7 +131,6 @@ export async function apiCreateAccount(
 	offsetRaw: string,
 	service: string,
 	serviceTok: string,
-	clientIpAddr: string,
 ) {
 	// TODO turnstile this
 
@@ -170,7 +169,7 @@ export async function apiCreateAccount(
 	const kv = services[service]!.kv;
 	await kv.put(serviceId, newAccount.id);
 
-	const sessionToken = await createSessionToken(newAccount.id, clientIpAddr);
+	const sessionToken = await createSessionToken(newAccount.id);
 
 	return new Response(sessionToken, {
 		status: 201,
