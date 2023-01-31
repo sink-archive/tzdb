@@ -1,7 +1,7 @@
 import { verifySessionTokenAndRespond } from "./auth";
 import { createAccount, getAccount, saveAccount } from "./storage";
 import { createTimezoneResponse, isValidTimezone } from "./timezones";
-import { idFromToken, services } from "./services";
+import { idFromCode, services } from "./services";
 
 export async function apiSelf(tok: string) {
 	const id = await verifySessionTokenAndRespond(tok);
@@ -56,7 +56,7 @@ export async function apiAssociate(
 	if (!account)
 		return new Response("There is no account with that ID", { status: 404 });
 
-	const serviceId = await idFromToken(service, serviceTok);
+	const serviceId = await idFromCode(service, serviceTok);
 
 	if (!serviceId)
 		return new Response(

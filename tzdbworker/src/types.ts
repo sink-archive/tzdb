@@ -13,6 +13,8 @@ declare global {
 	const KV_DISCORD: KVNamespace;
 	// maps session tokens -> account ids
 	const KV_SESSIONS: KVNamespace;
+
+	const ENV_DISCORD_CLIENT_SECRET: string;
 }
 
 export interface Account {
@@ -35,9 +37,5 @@ export type AccountNoId = PartiallyOptional<Account, "id">;
 
 export interface Service {
 	kv: KVNamespace;
-	scopes: string[];
-	idUrl: string;
-	// default to "Bearer "
-	tokenPrefix?: string;
-	selector(resp: any): string | undefined;
+	idFromCode(code: string): Promise<string | undefined>;
 }
