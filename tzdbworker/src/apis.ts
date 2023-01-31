@@ -3,13 +3,19 @@ import { createAccount, getAccount, saveAccount } from "./storage";
 import { createTimezoneResponse, isValidTimezone } from "./timezones";
 import { idFromCode, isSupportedService, services } from "./services";
 
+async function getAccountAndRespond(id: string) {
+	const account = await getAccount(id);
+	return (
+		account ?? new Response("There is no account with that ID", { status: 404 })
+	);
+}
+
 export async function apiSelf(tok: string) {
 	const id = await verifySessionTokenAndRespond(tok);
 	if (id instanceof Response) return id;
 
-	const account = await getAccount(id);
-	if (!account)
-		return new Response("There is no account with that ID", { status: 404 });
+	const account = await getAccountAndRespond(id);
+	if (account instanceof Response) return account;
 
 	return new Response(JSON.stringify(account));
 }
@@ -52,9 +58,8 @@ export async function apiAssociate(
 	const acctId = await verifySessionTokenAndRespond(tok);
 	if (acctId instanceof Response) return acctId;
 
-	const account = await getAccount(acctId);
-	if (!account)
-		return new Response("There is no account with that ID", { status: 404 });
+	const account = await getAccountAndRespond(acctId);
+	if (account instanceof Response) return account;
 
 	const serviceId = await idFromCode(service, serviceTok);
 
@@ -104,9 +109,8 @@ export async function apiDissociate(
 	const acctId = await verifySessionTokenAndRespond(tok);
 	if (acctId instanceof Response) return acctId;
 
-	const account = await getAccount(acctId);
-	if (!account)
-		return new Response("There is no account with that ID", { status: 404 });
+	const account = await getAccountAndRespond(acctId);
+	if (account instanceof Response) return account;
 
 	if (!account.services[service])
 		return new Response(`You do not have a ${service} account linked`, {
@@ -148,6 +152,8 @@ export async function apiCreateAccount(
 			status: 400,
 		});
 
+	const kv = services[service]!.kv;
+
 	const serviceId = await idFromCode(service, serviceTok);
 
 	if (!serviceId)
@@ -158,6 +164,12 @@ export async function apiCreateAccount(
 			},
 		);
 
+	if (await kv.get(serviceId))
+		return new Response(
+			`We logged into ${service} successfully, but you cannot create an TZDB account with this external account because it is linked to someone else`,
+			{ status: 401 },
+		);
+
 	const newAccount = await createAccount({
 		origin,
 		offset,
@@ -166,7 +178,6 @@ export async function apiCreateAccount(
 		},
 	});
 
-	const kv = services[service]!.kv;
 	await kv.put(serviceId, newAccount.id);
 
 	const sessionToken = await createSessionToken(newAccount.id);

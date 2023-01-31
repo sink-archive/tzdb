@@ -1,14 +1,20 @@
 export async function createSessionToken(id: string) {
 	const tok = crypto.randomUUID().replaceAll("-", "");
-	await KV_SESSIONS.put(tok, id, {
-		expirationTtl: 60 * 30, // 30 mins
-	});
+	await refreshSessionToken(tok, id);
 
 	return tok;
 }
 
-export const verifySessionToken = async (tok: string) =>
-	(await KV_SESSIONS.get(tok)) ?? false;
+const refreshSessionToken = (tok: string, id: string) =>
+	KV_SESSIONS.put(tok, id, {
+		expirationTtl: 60 * 30, // 30 mins
+	});
+
+export const verifySessionToken = async (tok: string, refresh = true) => {
+	const id = await KV_SESSIONS.get(tok);
+	if (id && refresh) await refreshSessionToken(tok, id);
+	return id ?? false;
+};
 
 export async function verifySessionTokenAndRespond(tok: string) {
 	const verificationResult = await verifySessionToken(tok);
