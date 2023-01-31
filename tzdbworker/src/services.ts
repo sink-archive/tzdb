@@ -54,3 +54,7 @@ export const services: Record<keyof Account["services"], Service> = {
 
 export const idFromCode = (service: keyof Account["services"], tok: string) =>
 	services[service]!.idFromCode(tok);
+
+export const isSupportedService = (
+	service: string,
+): service is keyof Account["services"] => service in services;

@@ -136,9 +136,12 @@ Fails if the given service is not linked.
 Fails if this is only service linked to your account,
 as otherwise you would be locked out as soon as your session token expired!
 
-## POST `/acct/create?origin=...&offset=...`
+## POST `/acct/create?origin=...&offset=...&service=...&token=...`
 
 Create an account with the given origin and offset.
+
+You must provide a service and token (see `/auth/login`),
+and will be given a session token.
 
 In this WIP version of this spec, you can just create accounts,
 but in future this will likely require Cloudflare Turnstile.

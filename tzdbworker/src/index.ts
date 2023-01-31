@@ -58,7 +58,13 @@ for (const [sName, srv] of serviceList) {
 }
 
 hono.post("/acct/create", (c) =>
-	apiCreateAccount(c.req.query("origin"), c.req.query("offset")),
+	apiCreateAccount(
+		c.req.query("origin"),
+		c.req.query("offset"),
+		c.req.query("service"),
+		c.req.query("token"),
+		c.req.header("CF-Connecting-IP"),
+	),
 );
 
 // TODO implement more APIs

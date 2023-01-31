@@ -1,7 +1,7 @@
-import { verifySessionTokenAndRespond } from "./auth";
+import { createSessionToken, verifySessionTokenAndRespond } from "./auth";
 import { createAccount, getAccount, saveAccount } from "./storage";
 import { createTimezoneResponse, isValidTimezone } from "./timezones";
-import { idFromCode, services } from "./services";
+import { idFromCode, isSupportedService, services } from "./services";
 
 export async function apiSelf(tok: string) {
 	const id = await verifySessionTokenAndRespond(tok);
@@ -61,14 +61,18 @@ export async function apiAssociate(
 	if (!serviceId)
 		return new Response(
 			`Either the given token was rejected by ${service}, or something broke`,
-			{ status: 401 },
+			{
+				status: 401,
+			},
 		);
 
 	const existingAssoc = await kv.get(serviceId);
 	if (existingAssoc && existingAssoc !== acctId)
 		return new Response(
 			`This ${service} account is already linked to someone else`,
-			{ status: 403 },
+			{
+				status: 403,
+			},
 		);
 
 	if (!!existingAssoc !== reassoc)
@@ -122,7 +126,13 @@ export async function apiDissociate(
 	return new Response(undefined, { status: 204 });
 }
 
-export async function apiCreateAccount(originRaw: string, offsetRaw: string) {
+export async function apiCreateAccount(
+	originRaw: string,
+	offsetRaw: string,
+	service: string,
+	serviceTok: string,
+	clientIpAddr: string,
+) {
 	// TODO turnstile this
 
 	const origin = originRaw.toUpperCase();
@@ -134,9 +144,32 @@ export async function apiCreateAccount(originRaw: string, offsetRaw: string) {
 	if (!Number.isFinite(offset))
 		return new Response("Provide an valid offset", { status: 400 });
 
-	// TODO require a service
-	return new Response(
-		JSON.stringify(await createAccount({ origin, offset, services: {} })),
-		{ status: 201 },
-	);
+	if (!isSupportedService(service))
+		return new Response(`${service} is not a supported service`, {
+			status: 400,
+		});
+
+	const serviceId = await idFromCode(service, serviceTok);
+
+	if (!serviceId)
+		return new Response(
+			`Either the given token was rejected by ${service}, or something broke`,
+			{
+				status: 401,
+			},
+		);
+
+	const newAccount = await createAccount({
+		origin,
+		offset,
+		services: {
+			[service]: serviceId,
+		},
+	});
+
+	const sessionToken = await createSessionToken(newAccount.id, clientIpAddr);
+
+	return new Response(sessionToken, {
+		status: 201,
+	});
 }
