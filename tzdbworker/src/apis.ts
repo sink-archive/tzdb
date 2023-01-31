@@ -167,6 +167,9 @@ export async function apiCreateAccount(
 		},
 	});
 
+	const kv = services[service]!.kv;
+	await kv.put(serviceId, newAccount.id);
+
 	const sessionToken = await createSessionToken(newAccount.id, clientIpAddr);
 
 	return new Response(sessionToken, {
