@@ -117,6 +117,12 @@ export async function apiDissociate(
 			status: 400,
 		});
 
+	if (Object.keys(account.services).length === 1)
+		return new Response(
+			"You cannot dissociate your only linked account, as this would make your account inaccessible.",
+			{ status: 403 },
+		);
+
 	const newAcct = {
 		...account,
 		services: { ...account.services },
