@@ -1,7 +1,7 @@
 import { verifySessionTokenAndRespond } from "./auth";
 import { createAccount, getAccount, saveAccount } from "./storage";
 import { createTimezoneResponse, isValidTimezone } from "./timezones";
-import { services } from "./services";
+import { idFromToken, services } from "./services";
 
 export async function apiSelf(tok: string) {
 	const id = await verifySessionTokenAndRespond(tok);
@@ -47,7 +47,7 @@ export async function apiAssociate(
 	kv: KVNamespace,
 	reassoc: boolean,
 	tok: string,
-	serviceId: string,
+	serviceTok: string,
 ) {
 	const acctId = await verifySessionTokenAndRespond(tok);
 	if (acctId instanceof Response) return acctId;
@@ -55,6 +55,14 @@ export async function apiAssociate(
 	const account = await getAccount(acctId);
 	if (!account)
 		return new Response("There is no account with that ID", { status: 404 });
+
+	const serviceId = await idFromToken(service, serviceTok);
+
+	if (!serviceId)
+		return new Response(
+			`Either the given token was rejected by ${service}, or something broke`,
+			{ status: 401 },
+		);
 
 	const existingAssoc = await kv.get(serviceId);
 	if (existingAssoc && existingAssoc !== acctId)

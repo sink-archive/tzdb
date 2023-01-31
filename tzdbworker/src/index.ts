@@ -32,23 +32,23 @@ for (const [sName, srv] of serviceList) {
 		apiLookup(sName, srv.kv, c.req.param("id")),
 	);
 
-	hono.post(`/${sName}/assoc/:serviceid`, (c) =>
+	hono.post(`/${sName}/assoc`, (c) =>
 		apiAssociate(
 			sName,
 			srv.kv,
 			false,
 			c.req.header("Authorization"),
-			c.req.param("serviceid"),
+			c.req.query("token"),
 		),
 	);
 
-	hono.post(`/${sName}/reassoc/:serviceid`, (c) =>
+	hono.post(`/${sName}/reassoc`, (c) =>
 		apiAssociate(
 			sName,
 			srv.kv,
 			true,
 			c.req.header("Authorization"),
-			c.req.param("serviceid"),
+			c.req.query("token"),
 		),
 	);
 

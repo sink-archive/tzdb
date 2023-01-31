@@ -9,7 +9,7 @@ export const services: Record<keyof Account["services"], Service> = {
 	},
 };
 
-const getIdFromToken = async (s: Service, tok: string) =>
+const getIdFromTokenImpl = async (s: Service, tok: string) =>
 	s.selector(
 		(await (
 			await fetch(s.idUrl, {
@@ -21,3 +21,6 @@ const getIdFromToken = async (s: Service, tok: string) =>
 			})
 		).json()) as any,
 	);
+
+export const idFromToken = (service: keyof Account["services"], tok: string) =>
+	getIdFromTokenImpl(services[service], tok);
