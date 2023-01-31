@@ -1,15 +1,58 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>TZDB</title>
-	</head>
-	<body>
-		<h1>welcome to epic tzdb</h1>
-	</body>
-</html>
+<BaseLayout>
+	<h1 class="ui header">TimezoneDB</h1>
+	<span class="ui large text">The free database for timezones</span>
+
+	<div class="ui divider" />
+
+	<p>
+		<span class="ui large text"><em>So you know that time</em></span>
+		when you were talking to your friends online, and you needed to arrange something?
+	</p>
+
+	<p>
+		I'm sure that went pretty smoothly, I'm sure that was a great time, nice.
+		But now imagine this again but your friends are overseas, and you can never remember their timezone
+		(let alone think straight enough to convert times in your head).
+	</p>
+
+	<p>
+		Wouldn't it be nice if you could see their local time,
+		integrated neatly into apps you use to talk to them, and they could see yours?
+	</p>
+
+	<span class="ui large text"><em>...That's TimezoneDB!</em></span>
+
+	<div class="ui divider" />
+
+	<h2 class="ui header">Specific integration, Native feel</h2>
+	<p>
+		TimezoneDB has specific integrations for each app you want to use it on.
+		The timezones and local times fit seamlessly into the apps as if they were always there.
+	</p>
+	<p>
+		Your choice between modding the apps or using a browser extension ;)
+	</p>
+
+	<h2 class="ui header">Open API, Open source, Build whatever you want</h2>
+	<p>
+		An easy to use API is provided to lookup IDs from all supported services.
+		Go build your own addons for third party clients etc :)
+	</p>
+	<p>
+		Once you're done, come back and PR your client to be listed on the
+		<a href="/services">services page!</a>
+	</p>
+	<p>
+		Or, if you feel like getting more than just your toes wet,
+		crack open the source code and add a new supported service.
+		A pull request and some setup from me later, you could be using a new service here on TZDB!
+	</p>
+
+	<h2 class="ui header"><em>Hold on</em>, are you at all inspired by PronounDB</h2>
+	<p>Uhhhhhhhhhhhhhh</p>
+	<p>Yeah, I guess, it is!</p>
+</BaseLayout>

@@ -1,0 +1,35 @@
+<div class="ui menu">
+	<a class="header item" href="/">TimezoneDB</a>
+	<a class="item" href="/services">Supported Services</a>
+	<a class="item" href="//github.com/yellowsink/tzdb">
+		<i class="github icon" />
+		Source Code
+	</a>
+
+	<div class="right menu">
+		<noscript>
+			<div class="item">
+				Logging in requires Javascript
+			</div>
+		</noscript>
+
+		<a class="item" href="/account">
+			<div style="display: none" id="nav-manage-account">
+				<i class="user icon" />
+				Manage Account
+			</div>
+			<div style="display: none" id="nav-login">
+				<i class="key icon" />
+				Login
+			</div>
+		</a>
+	</div>
+</div>
+
+<script>
+	import { getSessionToken } from "../res/sessiontoken";
+
+	document.getElementById(
+		getSessionToken() ? "nav-manage-account" : "nav-login"
+	).style.display = "contents";
+</script>

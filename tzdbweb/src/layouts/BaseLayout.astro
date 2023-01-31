@@ -1,0 +1,25 @@
+---
+import "fomantic-ui/dist/semantic.css";
+
+import Navbar from "../components/Navbar.astro";
+
+const fullTitle = Astro.props.title ? `TZDB - ${Astro.props.title}` : "TimezoneDB";
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<!-- <link rel="shortcut icon" type="image/ico" href="/favicon.ico" /> -->
+		<title>{fullTitle}</title>
+	</head>
+
+	<body id="root">
+		<Navbar />
+
+		<div class="ui container">
+			<slot />
+		</div>
+	</body>
+</html>

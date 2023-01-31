@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Account">
+	<h1 class="ui header">Manage your Account</h1>
+
+	<noscript>
+		<p>
+			<span class="ui big text">Aw nuts!</span>
+			<span class="ui large text">
+				You need JS to manage your account! Sorry about that.
+			</span>
+		</p>
+		<p>
+			You can totally make API calls yourself though...
+		</p>
+
+		<style is:inline>#js-jail{display:none}</style>
+	</noscript>
+
+	<div id="js-jail">
+		<p>//TODO</p>
+	</div>
+</BaseLayout>
