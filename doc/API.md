@@ -109,14 +109,7 @@ Get the timezone object of a user by an external ID
 
 Links your account on the given service to TZDB.
 
-The token should be an auth token for the given service
-obtained via OAuth2 or otherwise.
-The server will use this token to:
- - Log into the service as you
-   * This is how the server verifies that you do, in fact, own the external account
- - Request your own user ID
- - Link the ID to your TZDB account
- - Throw away your token. We do not store it.
+Please see AUTH.md for info on this.
 
 If you already have a connection to the given service, this will fail.
 You should use `/reassoc`.
