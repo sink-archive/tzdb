@@ -32,3 +32,12 @@ export interface TimezoneResponse {
 }
 
 export type AccountNoId = PartiallyOptional<Account, "id">;
+
+export interface Service {
+	kv: KVNamespace;
+	scopes: string[];
+	idUrl: string;
+	// default to "Bearer "
+	tokenPrefix?: string;
+	selector(resp: any): string | undefined;
+}

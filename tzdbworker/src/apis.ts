@@ -1,10 +1,7 @@
 import { verifySessionTokenAndRespond } from "./auth";
 import { createAccount, getAccount, saveAccount } from "./storage";
 import { createTimezoneResponse, isValidTimezone } from "./timezones";
-
-export const services = {
-	discord: KV_DISCORD,
-} as const;
+import { services } from "./services";
 
 export async function apiSelf(tok: string) {
 	const id = await verifySessionTokenAndRespond(tok);

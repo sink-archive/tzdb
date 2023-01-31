@@ -113,7 +113,6 @@ The token should be an auth token for the given service
 obtained via OAuth2 or otherwise.
 The server will use this token to:
  - Log into the service as you
-   * You should only provide limited scopes for this reason, see SERVICES.md
    * This is how the server verifies that you do, in fact, own the external account
  - Request your own user ID
  - Link the ID to your TZDB account
