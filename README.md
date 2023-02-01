@@ -13,3 +13,4 @@ I hope this can be a useful learning tool for
  - Hono
  - OAuth (albeit a kind of weird way of doing it)
  - API design / semantic HTTP methods & statuses perhaps
+ - Advanced typescript (see the bits where I'm working with the service names using `keyof` etc)
